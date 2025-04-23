@@ -12,7 +12,10 @@ dependencies = [
 ]
 
 [tool.poetry]
-packages = [{include = "pmdb", from = "src"}]
+packages = [
+    {include = "pmdb", from = "src"},
+    {include = "app"}
+]
 
 
 [tool.poetry.group.dev.dependencies]
