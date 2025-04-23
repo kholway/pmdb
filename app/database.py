@@ -2,7 +2,7 @@
 
 import logging
 
-from sqlalchemy import create_engine
+from sqlmodel import create_engine
 
 
 # Set up logging

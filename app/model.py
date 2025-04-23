@@ -1,15 +1,19 @@
 from typing import Optional
 import enum
 
+from sqlmodel import Field, SQLModel, Session
+from sqlalchemy import Column
 from sqlalchemy import Enum
-from sqlalchemy.orm import DeclarativeBase, MappedAsDataclass
-from sqlalchemy.orm import Mapped, mapped_column, relationship
+# from sqlalchemy.orm import DeclarativeBase, MappedAsDataclass
+# from sqlalchemy.orm import Mapped, mapped_column, relationship
+
+from app.database import engine
 
 
 # Create the model
 #
-class Base(MappedAsDataclass, DeclarativeBase):
-    pass
+# class Base(MappedAsDataclass, DeclarativeBase):
+#     pass
 
 
 class Rating(enum.Enum):
@@ -21,22 +25,27 @@ class Rating(enum.Enum):
     NR = "Not Rated"
 
 
-class Movie(Base):
-    __tablename__ = "Movie"
+class Movie(SQLModel, table=True):
+    # __tablename__ = "Movie"
 
-    title: Mapped[str]
+    id: Optional[int] = Field(primary_key=True, default=None)
+    title: str
+    year: Optional[int] = None
+    director: Optional[str] = None
+    runtime: Optional[int] = None
+     # This doesn't actually generate an enum data type for the database, but SQLite doesn't have enums anyway
+    mpaa_rating: Optional[Rating] = Field(sa_column=Column(Enum(Rating)), default=None)
     
-    id: Mapped[int] = mapped_column(primary_key=True, default=None)
-    year: Mapped[Optional[int]] = mapped_column(default=None)
-    director: Mapped[Optional[str]] = mapped_column(default=None)
-    runtime: Mapped[Optional[int]] = mapped_column(default=None)
-    mpaa_rating: Mapped[Optional[Rating]] = mapped_column(Enum(Rating), default=None)
-
 
 def main():
+    SQLModel.metadata.create_all(engine)
+    
     mov = Movie(title="Monty Python and the Holy Grail")
-    mov.runtime = "abc" # Allowed, but conflicts with type hint
-    print(mov)
+    mov.runtime = 91
+    
+    with Session(engine) as session:
+        session.add(mov)
+        session.commit()
 
 
 if __name__ == "__main__":
