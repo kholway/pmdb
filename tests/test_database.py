@@ -2,7 +2,7 @@ import os
 import pytest
 from sqlalchemy import text
 from app.database import engine
-from app.database import Base, Rating, Movie
+from app.model import Base, Rating, Movie
 
 
 def test_database_connection():
