@@ -1,4 +1,5 @@
-from app.models.movie import Base, Rating, Movie
+from app.models.movie import Rating, Movie
+
 
 def test_movie_object():
     grail = Movie(
@@ -7,3 +8,8 @@ def test_movie_object():
     grail.runtime = 91 # would be nice for this to be converted to right type, as in Pydantic
     grail.mpaa_rating = Rating.PG
     grail.director = "Terry Gilliam, Terry Jones"
+
+    assert grail.title == "Monty Python and the Holy Grail"
+    assert grail.runtime == 91
+    assert grail.mpaa_rating == Rating.PG
+    assert grail.director == "Terry Gilliam, Terry Jones"
