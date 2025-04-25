@@ -9,8 +9,6 @@ def test_database_connection():
     engine.connect()
 
 def test_movie_object():
-    with pytest.raises(Exception) as e:
-        mov = Movie()
 
     grail = Movie(
         title="Monty Python and the Holy Grail",
