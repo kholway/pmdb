@@ -48,7 +48,7 @@ def main():
     create_db()
 
     mov = Movie(title="Monty Python and the Holy Grail")
-    mov.runtime = "91a" # Allowed, but conflicts with type hint
+    mov.runtime = 91
     with Session(engine) as session:
         session.add(mov)
         session.commit()     
