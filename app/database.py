@@ -3,7 +3,7 @@
 import logging
 
 from sqlalchemy import create_engine
-
+from sqlalchemy.orm import sessionmaker
 
 # Set up logging
 #
@@ -25,3 +25,5 @@ db_url = f"{db_type}+{db_api}:///./{db_name}"
 should_echo = True
 logger.debug(f"Setting up database engine... {db_url}")
 engine = create_engine(db_url, echo=should_echo)
+
+SessionLocal = sessionmaker(engine)
