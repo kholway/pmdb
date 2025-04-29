@@ -26,7 +26,7 @@ class Rating(enum.Enum):
 class Movie(Base):
     __tablename__ = "Movie"
     
-    id: Mapped[Optional[int]] = mapped_column(primary_key=True)
+    id: Mapped[Optional[int]] = mapped_column(primary_key=True, nullable=False)
     title: Mapped[str]
     year: Mapped[Optional[int]]
     director: Mapped[Optional[str]]
