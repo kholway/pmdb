@@ -8,6 +8,7 @@ from app.models.movie import Base
 
 @fixture
 def mem_db():
+    """Provide an in-memory database for testing"""
     engine = create_engine("sqlite+pysqlite:///:memory:", echo=True)
     Base.metadata.create_all(engine)
     try:
@@ -19,6 +20,7 @@ def mem_db():
 
 @fixture
 def movies():
+    """Provide a list of movie objects for testing"""
     # Create movie objects
     grail = Movie(
         title="Monty Python and the Holy Grail",
@@ -33,6 +35,7 @@ def movies():
 
 
 def test_movie_object(movies):
+    """Test behavior of movie object attributes"""
     grail = movies[0]
 
     assert grail.title == "Monty Python and the Holy Grail"
@@ -42,6 +45,7 @@ def test_movie_object(movies):
 
 
 def test_create_movie(mem_db, movies):
+    """Test that movie can be successfully added to the database"""
     # Check object before Create
     grail = movies[0]
     assert grail.id == None
