@@ -47,8 +47,7 @@ def test_create_movie(mem_db, movies):
     assert grail.id == None
 
     # Create
-    for mov in movies:
-        mem_db.add(mov)
+    mem_db.add(grail)
     mem_db.commit()
     
     # Check that movie added successfully
