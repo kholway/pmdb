@@ -29,7 +29,7 @@ class Movie(Base):
     id: Mapped[Optional[int]] = mapped_column(primary_key=True, nullable=False)
     title: Mapped[str]
     year: Mapped[Optional[int]]
-    country: Mapped[Optional[int]]
+    country: Mapped[Optional[str]]
     director: Mapped[Optional[str]]
     runtime: Mapped[Optional[int]]
     mpaa_rating: Mapped[Optional[Rating]] = mapped_column(Enum(Rating), default=None)
