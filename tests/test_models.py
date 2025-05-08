@@ -1,3 +1,4 @@
+import pytest
 from pytest import fixture
 from sqlalchemy import create_engine
 from sqlalchemy import select
@@ -102,8 +103,38 @@ def test_read_movie(mem_db, movies):
     assert titles == sorted([mov.title for mov in movies], reverse=True)
 
 
-def test_update_movie():
-    pass
+def test_update_movie(mem_db, movies):
+    # Populate database first
+    for mov in movies:
+        mem_db.add(mov)
+    mem_db.commit()
+
+    # Update a movie
+    meaning = mem_db.execute(
+        select(Movie)
+        .where(Movie.title == "Monty Python's Meaning of Life")
+    ).scalar_one()
+    assert isinstance(meaning, Movie)
+    meaning.country = "UK, USA"
+    assert meaning in mem_db.dirty
+    
+    # Check country not updated yet
+    with mem_db.no_autoflush:
+        meaning_country = mem_db.execute(
+            select(Movie.country)
+            .where(Movie.title == "Monty Python's Meaning of Life")
+        ).scalar_one()
+        assert meaning_country == None
+    assert meaning in mem_db.dirty
+
+    # Update DB and check country updated
+    mem_db.commit()
+    meaning_country = mem_db.execute(
+        select(Movie.country)
+        .where(Movie.title == "Monty Python's Meaning of Life")
+    ).scalar_one()
+    assert meaning_country == "UK, USA"
+    assert meaning not in mem_db.dirty
 
 
 def test_delete_movie():
