@@ -4,6 +4,7 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session
 from app.models.movie import Rating, Movie
 from app.models.movie import Base
+import sqlalchemy as sa
 
 
 @fixture
@@ -24,12 +25,28 @@ def movies():
     # Create movie objects
     grail = Movie(
         title="Monty Python and the Holy Grail",
+        year=1975,
+        country="UK",
+        director = "Terry Gilliam, Terry Jones",
         runtime=91,
-        mpaa_rating = Rating.PG,
-        director = "Terry Gilliam, Terry Jones"
+        mpaa_rating = Rating.PG
     )
-    brian = Movie(title="Monty Python's Life of Brian")
-    meaning = Movie(title="Monty Python's The Meaning of Life")
+    brian = Movie(
+        title="Monty Python's Life of Brian",
+        year=1979,
+        country="UK",
+        director = "Terry Jones",
+        runtime=94,
+        mpaa_rating = Rating.R
+    )
+    meaning = Movie(
+        title="Monty Python's Meaning of Life",
+        year=1983,
+        # omit country for testing ("UK, USA")
+        director = "Terry Jones",
+        runtime=107,
+        mpaa_rating = Rating.R
+    )
     yield [grail, brian, meaning]
     # No teardown
 
@@ -65,8 +82,24 @@ def test_create_movie(mem_db, movies):
     assert grail.id == 1
 
 
-def test_read_movie():
-    pass
+def test_read_movie(mem_db, movies):
+    # Populate database first
+    for mov in movies:
+        mem_db.add(mov)
+    mem_db.commit()
+
+    # Try filtering on country of origin
+    query = select(Movie.title).where(Movie.country == "UK")
+    titles = mem_db.scalars(query).all()
+    assert "Monty Python and the Holy Grail" in titles
+    assert "Monty Python's Life of Brian" in titles
+    assert "Monty Python's Meaning of Life" not in titles
+
+    # Try sorting by movie run time
+    query = select(Movie.title).order_by(sa.desc(Movie.runtime))
+    titles = mem_db.scalars(query).all()
+    assert len(titles) == 3
+    assert titles == sorted([mov.title for mov in movies], reverse=True)
 
 
 def test_update_movie():
