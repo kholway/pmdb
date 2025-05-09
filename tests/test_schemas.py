@@ -1,6 +1,6 @@
 import pytest
 import pydantic
-from app.schemas import MovieBase, MovieCreate, MovieResponse
+from app.schemas.movie import MovieBase, MovieCreate, MovieResponse
 from app.models.movie import Rating, Movie
 
 
