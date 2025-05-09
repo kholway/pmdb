@@ -1,26 +1,24 @@
 import pytest
-from pytest import fixture
-from sqlalchemy import create_engine
-from sqlalchemy import select
-from sqlalchemy.orm import Session
-from app.models.movie import Rating, Movie
-from app.models.movie import Base
 import sqlalchemy as sa
+from sqlalchemy import select
+import sqlalchemy.orm as sao
+
+from app.models.movie import Base, Rating, Movie
 
 
-@fixture
+@pytest.fixture
 def mem_db():
     """Provide an in-memory database for testing"""
-    engine = create_engine("sqlite+pysqlite:///:memory:", echo=True)
+    engine = sa.create_engine("sqlite+pysqlite:///:memory:", echo=True)
     Base.metadata.create_all(engine)
     try:
-        db = Session(engine)
+        db = sao.Session(engine)
         yield db
     finally:
         db.close()
 
 
-@fixture
+@pytest.fixture
 def movies():
     """Provide a list of movie objects for testing"""
     # Create movie objects
@@ -63,7 +61,7 @@ def test_movie_object(movies):
 
 
 def test_create_movie(mem_db, movies):
-    """Test that movie can be successfully added to the database"""
+    """Test movie model to ensure that movie can be successfully added to a database"""
     # Check object before Create
     grail = movies[0]
     assert grail.id == None
@@ -84,6 +82,7 @@ def test_create_movie(mem_db, movies):
 
 
 def test_read_movie(mem_db, movies):
+    """Test movie model to ensure that movies can be successfully read from a database"""
     # Populate database first
     for mov in movies:
         mem_db.add(mov)
@@ -104,6 +103,8 @@ def test_read_movie(mem_db, movies):
 
 
 def test_update_movie(mem_db, movies):
+    """Test movie model to ensure that movies can be successfully updated in a database"""
+    
     # Populate database first
     for mov in movies:
         mem_db.add(mov)
@@ -138,6 +139,8 @@ def test_update_movie(mem_db, movies):
 
 
 def test_delete_movie(mem_db, movies):
+    """Test movie model to ensure that movies can be successfully deleted from a database"""
+    
     # Populate database first
     for mov in movies:
         mem_db.add(mov)
