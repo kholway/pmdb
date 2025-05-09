@@ -16,3 +16,11 @@ class MovieBase(BaseModel):
 class MovieCreate(MovieBase):
     """The Pydantic model responsible for movie creation"""
     pass
+
+
+class MovieResponse(MovieBase):
+    """The Pydantic model responsible for movie reading"""
+    # Modern placement for orm_mode = True
+    model_config = ConfigDict(from_attributes=True)
+
+    id: int

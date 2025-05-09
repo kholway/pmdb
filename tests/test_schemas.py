@@ -1,7 +1,7 @@
 import pytest
 import pydantic
-from app.schemas import MovieBase, MovieCreate, MovieRead
-from app.models.movie import Rating
+from app.schemas import MovieBase, MovieCreate, MovieResponse
+from app.models.movie import Rating, Movie
 
 
 def test_movie_create_valid():
@@ -47,7 +47,7 @@ def test_movie_create_optional_fields():
 
 def test_movie_create_extra_data():
     """Test that extraneous data is ignored"""
-    
+
     data = {
         "title": "Monty Python and the Holy Grail",
         "foo": "bar"
@@ -67,3 +67,44 @@ def test_movie_base_invalid_year():
     }
     with pytest.raises(pydantic.ValidationError):
         MovieCreate(**data)
+
+        
+def test_movie_response_from_orm():
+    """Test that an ORM object can be validated."""
+
+    grail_orm = Movie(
+        id=1, # for testing, provide this explicitly
+        title="Monty Python and the Holy Grail",
+        year=1975,
+        country="UK",
+        director = "Terry Gilliam, Terry Jones",
+        runtime=91,
+        mpaa_rating = Rating.PG
+    )
+    
+    grail_model = MovieResponse.model_validate(grail_orm)
+    
+
+def test_movie_response_data_serialization():
+    """Test that the response serializes correctly."""
+     
+    data = {
+        "title": "Monty Python and the Holy Grail",
+        "director": "Terry Gilliam, Terry Jones",
+        "runtime": 91,
+        "year": 1975,
+        "country": "UK",
+        "mpaa_rating": Rating.PG
+    }
+    movie = MovieResponse(id=1,**data)
+    dump = movie.model_dump()
+    assert isinstance(dump, dict)
+    assert dump["title"] == data["title"]
+    assert dump["runtime"] == data["runtime"]
+    
+
+
+def test_movie_response_schema_serialization():
+    """Test that the response schema serializes correctly."""
+    # Not sure what this is yet
+    pass
