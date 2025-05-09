@@ -47,6 +47,7 @@ def test_movie_create_optional_fields():
 
 def test_movie_create_extra_data():
     """Test that extraneous data is ignored"""
+    
     data = {
         "title": "Monty Python and the Holy Grail",
         "foo": "bar"
@@ -59,6 +60,7 @@ def test_movie_create_extra_data():
 
 def test_movie_base_invalid_year():
     """Test that invalid year values raise validation errors."""
+
     data = {
     "title": "Monty Python and the Holy Grail",
     "year": -1975,
