@@ -137,5 +137,35 @@ def test_update_movie(mem_db, movies):
     assert meaning not in mem_db.dirty
 
 
-def test_delete_movie():
-    pass
+def test_delete_movie(mem_db, movies):
+    # Populate database first
+    for mov in movies:
+        mem_db.add(mov)
+    mem_db.commit()
+    
+    # Pick a movie and delete it
+    grail = mem_db.execute(
+        select(Movie)
+        .where(Movie.title == "Monty Python and the Holy Grail")
+    ).scalar_one()
+    assert isinstance(grail, Movie)
+    mem_db.delete(grail)
+    assert grail in mem_db.deleted
+
+    # Check not updated yet
+    with mem_db.no_autoflush:
+        tmp = mem_db.execute(
+            select(Movie)
+            .where(Movie.title == "Monty Python and the Holy Grail")
+        ).scalar_one()
+        assert tmp is grail
+    assert grail in mem_db.deleted
+    
+    # Update DB and check that delete was successful
+    mem_db.commit()
+    tmp = mem_db.execute(
+        select(Movie.country)
+        .where(Movie.title == "Monty Python's Meaning of Life")
+    ).scalar_one_or_none()
+    assert tmp is None
+    assert grail not in mem_db.deleted
