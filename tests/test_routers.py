@@ -23,4 +23,13 @@ def test_create_movie(client):
 
 
 def test_create_movie_invalid(client):
-    pass
+    response = client.post("/movies/", json={
+        "title": "Monty Python and the Holy Grail",
+        "year": 1
+    })
+    
+    assert response.status_code == 422
+    data = response.json()
+    assert "title" not in data
+    assert "year" not in data
+    assert "id" not in data
