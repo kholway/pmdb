@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, Response
+from fastapi import APIRouter, Depends, Response, HTTPException
 from sqlalchemy.orm import Session
 from app.schemas.movie import MovieCreate, MovieResponse
 from app.models.movie import Movie
@@ -23,3 +23,15 @@ def create_movie(
     response.headers["Location"] = f"/movies/{new_movie.id}"
 
     return new_movie
+
+
+@router.get(
+        "/movies/{movie_id}", response_model=MovieResponse,
+        name="read_movie")
+def read_movie(movie_id: int, db: Session = Depends(get_db)) -> Movie:
+    """Read a movie from the database using its id"""
+
+    movie = db.get(Movie, movie_id)
+    if movie is None:
+        raise HTTPException(status_code=404, detail="Movie not found")
+    return movie
