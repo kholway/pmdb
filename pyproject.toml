@@ -14,7 +14,6 @@ dependencies = [
 
 [tool.poetry]
 packages = [
-    {include = "pmdb", from = "src"},
     {include = "app"}
 ]
 
