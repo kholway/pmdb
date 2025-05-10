@@ -14,7 +14,7 @@ def test_create_movie(client):
         "runtime": 91,
     })
 
-    assert response.status_code == 200
+    assert response.status_code == 201
     data = response.json()
     assert data["title"] == "Monty Python and the Holy Grail"
     assert data["director"] == "Terry Gilliam, Terry Jones"
