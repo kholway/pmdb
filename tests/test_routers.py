@@ -1,0 +1,26 @@
+import pytest
+from fastapi.testclient import TestClient
+from app.main import app
+
+@pytest.fixture
+def client():
+    client = TestClient(app)
+    yield client
+
+def test_create_movie(client):
+    response = client.post("/movies/", json={
+        "title": "Monty Python and the Holy Grail",
+        "director": "Terry Gilliam, Terry Jones",
+        "runtime": 91,
+    })
+
+    assert response.status_code == 200
+    data = response.json()
+    assert data["title"] == "Monty Python and the Holy Grail"
+    assert data["director"] == "Terry Gilliam, Terry Jones"
+    assert data["runtime"] == 91
+    assert "id" in data
+
+
+def test_create_movie_invalid(client):
+    pass
