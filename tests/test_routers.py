@@ -7,6 +7,7 @@ def client():
     client = TestClient(app)
     yield client
 
+
 def test_create_movie(client):
     response = client.post("/movies/", json={
         "title": "Monty Python and the Holy Grail",
@@ -33,3 +34,15 @@ def test_create_movie_invalid(client):
     assert "title" not in data
     assert "year" not in data
     assert "id" not in data
+
+
+def test_read_movie_exists(client):
+    pass
+
+
+def test_read_movie_does_not_exist(client):
+    pass
+
+
+def test_read_movie_invalid_id(client):
+    pass
