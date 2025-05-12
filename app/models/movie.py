@@ -43,18 +43,3 @@ class Movie(Base):
 
 def create_db():
     Base.metadata.create_all(engine)
-
-
-def main():
-    create_db()
-
-    mov = Movie(title="Monty Python and the Holy Grail")
-    mov.runtime = 91
-    with Session(engine) as session:
-        session.add(mov)
-        session.commit()     
-        print(mov)
-
-
-if __name__ == "__main__":
-    main()
