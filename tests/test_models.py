@@ -165,10 +165,9 @@ def test_delete_movie(mem_db, movies):
     assert grail in mem_db.deleted
     
     # Update DB and check that delete was successful
-    mem_db.commit()
-    tmp = mem_db.execute(
-        select(Movie.country)
-        .where(Movie.title == "Monty Python's Meaning of Life")
+    result = mem_db.execute(
+        select(Movie)
+        .where(Movie.title == "Monty Python and the Holy Grail")
     ).scalar_one_or_none()
-    assert tmp is None
+    assert result is None
     assert grail not in mem_db.deleted
