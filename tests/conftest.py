@@ -1,13 +1,15 @@
 from pytest import fixture
-from tests.utils.db import setup_test_db, teardown_test_db
+from tests.utils.db import setup_mem_db, teardown_db
 from app.models.movie import Rating
 
 @fixture()
 def mem_db():
     """Provide an in-memory database for testing"""
-    engine, db = setup_test_db()
+    engine, SessionLocal = setup_mem_db()
+    db = SessionLocal()
     yield db
-    teardown_test_db(engine, db)
+    db.close()
+    teardown_db(engine)
 
 
 @fixture()
