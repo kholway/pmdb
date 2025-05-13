@@ -84,7 +84,8 @@ def test_movie_response_data_serialization(movie_data):
     assert dump["runtime"] == data["runtime"]
     
 
-
-def test_movie_response_schema_serialization():
+def test_movie_response_schema_serialization(movie_data):
     """Test that the response schema serializes correctly."""
-    pass
+    schema = MovieResponse.model_json_schema()
+    assert 'title' in schema['properties'].keys()
+    # No need to test the functionality of Pydantic further
