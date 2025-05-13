@@ -1,17 +1,13 @@
+"""Defines the data model representing movies"""
+
 from typing import Optional
 import enum
 
 from sqlalchemy import Enum
-from sqlalchemy.orm import DeclarativeBase
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from sqlalchemy.orm import Session
-from app.database import engine
-
-# Create the model
-#
-class Base(DeclarativeBase):
-    pass
+from app.database import engine, Base
 
 
 class Rating(enum.Enum):
@@ -39,7 +35,3 @@ class Movie(Base):
             f"year={self.year!r}, director={self.director!r}, "
             f"runtime={self.runtime!r}, mpaa_rating={self.mpaa_rating!r})"  
         )
-
-
-def create_db():
-    Base.metadata.create_all(engine)
