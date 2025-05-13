@@ -2,11 +2,6 @@ import pytest
 from fastapi.testclient import TestClient
 from app.main import app
 
-@pytest.fixture
-def client():
-    client = TestClient(app)
-    yield client
-
 
 def test_create_movie(client):
     response = client.post("/movies/", json={

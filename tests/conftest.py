@@ -1,6 +1,11 @@
 from pytest import fixture
+from fastapi.testclient import TestClient
+
 from tests.utils.db import setup_mem_db, teardown_db
 from app.models.movie import Rating
+from app.main import app
+from app.deps import get_db
+
 
 @fixture()
 def mem_db():
@@ -23,3 +28,19 @@ def movie_data():
         "runtime": 91,
         "mpaa_rating": Rating.PG
     }
+
+
+@fixture()
+def client(mem_db):
+    def override_get_db():
+        yield mem_db
+        
+    # Setup
+    app.dependency_overrides[get_db] = override_get_db
+    test_client = TestClient(app)
+
+    # Provide the test client
+    yield test_client
+
+    # Cleanup
+    app.dependency_overrides.clear()
