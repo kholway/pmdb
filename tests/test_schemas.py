@@ -22,14 +22,14 @@ def test_movie_create_missing_required_field():
 
     data = {"year": 1975}
     with pytest.raises(pydantic.ValidationError) as e:
-        movie = MovieCreate(**data)
+        movie = MovieCreate(**data) # type: ignore
 
 
 def test_movie_create_optional_fields():
     """Test that optional fields are handled correctly."""
 
     data = {"title": "Monty Python and the Holy Grail"}
-    movie = MovieCreate(**data)
+    movie = MovieCreate(**data) # type: ignore
     assert movie.title is data["title"]
     assert movie.year is None
     assert movie.country is None
@@ -45,10 +45,10 @@ def test_movie_create_extra_data():
         "title": "Monty Python and the Holy Grail",
         "foo": "bar"
     }    
-    movie = MovieCreate(**data)
+    movie = MovieCreate(**data) # type: ignore
     assert movie.title is data["title"]
     with pytest.raises(Exception):
-        movie.foo
+        movie.foo # type: ignore
     
 
 def test_movie_base_invalid_year():
