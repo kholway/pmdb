@@ -37,6 +37,8 @@ def client(mem_db):
     # Setup
     app.dependency_overrides[get_db] = override_get_db
     test_client = TestClient(app)
+    # Expose the db to tests that need to populate the db
+    test_client.db_session = mem_db # type: ignore
 
     # Provide the test client
     yield test_client
