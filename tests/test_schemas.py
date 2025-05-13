@@ -4,17 +4,10 @@ from app.schemas.movie import MovieBase, MovieCreate, MovieResponse
 from app.models.movie import Rating, Movie
 
 
-def test_movie_create_valid():
+def test_movie_create_valid(movie_data):
     """Test that a movie can be created."""
 
-    data = {
-        "title": "Monty Python and the Holy Grail",
-        "director": "Terry Gilliam, Terry Jones",
-        "runtime": 91,
-        "year": 1975,
-        "country": "UK",
-        "mpaa_rating": Rating.PG
-    }
+    data = movie_data
     movie = MovieCreate(**data)
     assert movie.title == data["title"]
     assert movie.year == data["year"]
@@ -69,34 +62,22 @@ def test_movie_base_invalid_year():
         MovieCreate(**data)
 
         
-def test_movie_response_from_orm():
+def test_movie_response_from_orm(movie_data):
     """Test that an ORM object can be validated."""
 
     grail_orm = Movie(
         id=1, # for testing, provide this explicitly
-        title="Monty Python and the Holy Grail",
-        year=1975,
-        country="UK",
-        director = "Terry Gilliam, Terry Jones",
-        runtime=91,
-        mpaa_rating = Rating.PG
+        **movie_data
     )
     
     grail_model = MovieResponse.model_validate(grail_orm)
     
 
-def test_movie_response_data_serialization():
+def test_movie_response_data_serialization(movie_data):
     """Test that the response serializes correctly."""
      
-    data = {
-        "title": "Monty Python and the Holy Grail",
-        "director": "Terry Gilliam, Terry Jones",
-        "runtime": 91,
-        "year": 1975,
-        "country": "UK",
-        "mpaa_rating": Rating.PG
-    }
-    movie = MovieResponse(id=1,**data)
+    data = movie_data
+    movie = MovieResponse(id=1, **data)
     dump = movie.model_dump()
     assert isinstance(dump, dict)
     assert dump["title"] == data["title"]
@@ -106,5 +87,4 @@ def test_movie_response_data_serialization():
 
 def test_movie_response_schema_serialization():
     """Test that the response schema serializes correctly."""
-    # Not sure what this is yet
     pass
