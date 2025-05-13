@@ -1,5 +1,6 @@
 from pytest import fixture
 from tests.utils.db import setup_test_db, teardown_test_db
+from app.models.movie import Rating
 
 @fixture()
 def mem_db():
@@ -18,5 +19,5 @@ def movie_data():
         "country": "UK",
         "director": "Terry Gilliam, Terry Jones",
         "runtime": 91,
-        "mpaa_rating": "PG"
+        "mpaa_rating": Rating.PG
     }

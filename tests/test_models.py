@@ -7,7 +7,6 @@ from app.models.movie import Rating, Movie
 def test_movie_object(movie_data):
     """Test behavior of movie object attributes"""
     grail = Movie(**movie_data)
-    grail.mpaa_rating = Rating.PG
 
     assert grail.title == "Monty Python and the Holy Grail"
     assert grail.runtime == 91
@@ -45,7 +44,7 @@ def test_read_movie(mem_db, movie_data):
         "country": "UK",
         "director": "Terry Jones",
         "runtime": 94,
-        "mpaa_rating": "R"
+        "mpaa_rating": Rating.R
     }
     meaning_data = {
         "title": "Monty Python's Meaning of Life",
@@ -53,7 +52,7 @@ def test_read_movie(mem_db, movie_data):
         # omit country for testing ("UK, USA")
         "director": "Terry Jones",
         "runtime": 107,
-        "mpaa_rating": "R"
+        "mpaa_rating": Rating.R
     }
     
     movies = [
