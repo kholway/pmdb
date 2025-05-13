@@ -7,6 +7,7 @@ from app.models.movie import Rating, Movie
 def test_movie_object(movie_data):
     """Test behavior of movie object attributes"""
     grail = Movie(**movie_data)
+    grail.mpaa_rating = Rating.PG
 
     assert grail.title == "Monty Python and the Holy Grail"
     assert grail.runtime == 91

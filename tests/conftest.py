@@ -26,7 +26,6 @@ def movie_data():
         "country": "UK",
         "director": "Terry Gilliam, Terry Jones",
         "runtime": 91,
-        "mpaa_rating": Rating.PG
     }
 
 

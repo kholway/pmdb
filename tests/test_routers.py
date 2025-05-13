@@ -1,19 +1,20 @@
 """Tests the API routes"""
 
 
-def test_route_create_movie(client):
-    response = client.post("/movies/", json={
-        "title": "Monty Python and the Holy Grail",
-        "director": "Terry Gilliam, Terry Jones",
-        "runtime": 91,
-    })
+def test_route_create_movie(client, movie_data):
+    response = client.post("/movies/", json=movie_data)
 
     assert response.status_code == 201
-    data = response.json()
-    assert data["title"] == "Monty Python and the Holy Grail"
-    assert data["director"] == "Terry Gilliam, Terry Jones"
-    assert data["runtime"] == 91
-    assert "id" in data
+    response_data = response.json()
+    assert response_data["title"] == movie_data["title"]
+    assert response_data["year"] == movie_data["year"]
+    assert response_data["director"] == movie_data["director"]
+    assert response_data["runtime"] == movie_data["runtime"]
+    assert response_data["country"] == movie_data["country"]
+    assert "id" in response_data
+
+    # Not implemented
+    # assert response_data["mpaa_rating"] == movie_data["mpaa_rating"]   
 
 
 def test_route_create_movie_invalid(client):

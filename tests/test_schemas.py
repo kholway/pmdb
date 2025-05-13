@@ -8,6 +8,7 @@ def test_movie_create_valid(movie_data):
     """Test that a movie can be created."""
 
     data = movie_data
+    data["mpaa_rating"] = Rating.PG
     movie = MovieCreate(**data)
     assert movie.title == data["title"]
     assert movie.year == data["year"]
