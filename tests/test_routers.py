@@ -1,9 +1,7 @@
-import pytest
-from fastapi.testclient import TestClient
-from app.main import app
+"""Tests the API routes"""
 
 
-def test_create_movie(client):
+def test_route_create_movie(client):
     response = client.post("/movies/", json={
         "title": "Monty Python and the Holy Grail",
         "director": "Terry Gilliam, Terry Jones",
@@ -18,7 +16,7 @@ def test_create_movie(client):
     assert "id" in data
 
 
-def test_create_movie_invalid(client):
+def test_route_create_movie_invalid(client):
     response = client.post("/movies/", json={
         "title": "Monty Python and the Holy Grail",
         "year": 1
@@ -31,13 +29,13 @@ def test_create_movie_invalid(client):
     assert "id" not in data
 
 
-def test_read_movie_exists(client):
+def test_route_read_movie_exists(client):    
     pass
 
 
-def test_read_movie_does_not_exist(client):
+def test_route_read_movie_does_not_exist(client):
     pass
 
 
-def test_read_movie_invalid_id(client):
+def test_route_read_movie_invalid_id(client):
     pass
