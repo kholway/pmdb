@@ -62,6 +62,18 @@ def test_movie_create_invalid_year():
         MovieCreate(**data)
 
         
+def test_movie_create_invalid_mpaa_rating():
+    """Test that invalid year values raise validation errors."""
+
+    data = {
+    "title": "Monty Python and the Holy Grail",
+    "mpaa_rating": "F",
+    }
+    
+    with pytest.raises(pydantic.ValidationError):
+        MovieCreate(**data)
+
+        
 def test_movie_response_from_orm(movie_data):
     """Test that an ORM object can be validated."""
 
