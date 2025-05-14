@@ -1,14 +1,13 @@
 import pytest
 import pydantic
 from app.schemas.movie import MovieBase, MovieCreate, MovieResponse
-from app.models.movie import Rating, Movie
+from app.models.movie import Movie
 
 
 def test_movie_create_valid(movie_data):
     """Test that a movie can be created."""
 
     data = movie_data
-    data["mpaa_rating"] = Rating.PG
     movie = MovieCreate(**data)
     assert movie.title == data["title"]
     assert movie.year == data["year"]
