@@ -58,3 +58,33 @@ def test_route_read_movie_does_not_exist(client):
     assert response.status_code == 404
     response_data = response.json()
     assert "detail" in response_data
+
+
+def test_route_update_movie_exists(client, movie_data):
+    # Populate the database
+    db = client.db_session
+    mov = Movie(**movie_data)
+    db.add(mov)
+    db.commit()
+    movie_id = mov.id
+    assert movie_id == 1
+
+    # Update
+    movie_data["director"] = "Steven Spielberg"
+    response = client.put(f"/movies/{movie_id}", json=movie_data)
+
+    # Check result
+    assert response.status_code == 200
+    response_data = response.json()
+    print(response_data)
+    for key in movie_data.keys():
+        assert movie_data[key] == response_data[key]
+        assert movie_data[key] == getattr(mov, key)
+
+
+def test_route_update_movie_does_not_exist(client, movie_data):
+    # Try to update a movie that's not there
+    response = client.put("/movies/100", json=movie_data)
+    assert response.status_code == 404
+    response_data = response.json()
+    assert "detail" in response_data

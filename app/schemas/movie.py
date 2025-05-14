@@ -18,6 +18,11 @@ class MovieCreate(MovieBase):
     pass
 
 
+class MovieUpdate(MovieBase):
+    """The Pydantic model responsible for movie updates"""
+    pass
+
+
 class MovieResponse(MovieBase):
     """The Pydantic model responsible for movie reading"""
     # Modern placement for orm_mode = True
