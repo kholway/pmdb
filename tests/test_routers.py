@@ -88,3 +88,26 @@ def test_route_update_movie_does_not_exist(client, movie_data):
     assert response.status_code == 404
     response_data = response.json()
     assert "detail" in response_data
+
+
+def test_route_delete_movie_exists(client, movie_data):
+    # Populate the database
+    db = client.db_session
+    mov = Movie(**movie_data)
+    db.add(mov)
+    db.commit()
+    movie_id = mov.id
+
+    # Try to read a movie
+    response = client.delete(f"/movies/{movie_id}")
+    assert response.status_code == 204
+    assert response.content == b""
+
+
+def test_route_delete_movie_does_not_exist(client):
+    # Try to read a movie that's not there
+    response = client.delete(f"/movies/100")
+    assert response.status_code == 404
+    response_data = response.json()
+    assert "detail" in response_data
+

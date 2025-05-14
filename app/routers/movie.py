@@ -61,3 +61,16 @@ def update_movie(movie_id: int,
     db.commit()
     db.refresh(movie)
     return movie
+
+
+@router.delete("/movies/{movie_id}", status_code=204)
+def delete_movie(movie_id: int, db: Session = Depends(get_db)) -> None:
+    """Delete a movie from the database using its id"""
+
+    movie = db.get(Movie, movie_id)
+    if movie is None:
+        raise HTTPException(status_code=404, detail="Movie not found")
+    
+    db.delete(movie)
+    db.commit()
+    return
