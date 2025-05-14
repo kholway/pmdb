@@ -10,7 +10,7 @@ from sqlalchemy.orm import Session
 from app.database import engine, Base
 
 
-class Rating(enum.Enum):
+class Rating(str, enum.Enum):
     G = "G"
     PG = "PG"
     PG13 = "PG-13"
