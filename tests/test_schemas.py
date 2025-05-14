@@ -71,7 +71,7 @@ def test_movie_create_invalid_mpaa_rating():
     }
     
     with pytest.raises(pydantic.ValidationError):
-        MovieCreate(**data)
+        MovieCreate(**data) # type: ignore
 
         
 def test_movie_response_from_orm(movie_data):
