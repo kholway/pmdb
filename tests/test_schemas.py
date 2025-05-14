@@ -51,7 +51,7 @@ def test_movie_create_extra_data():
         movie.foo # type: ignore
     
 
-def test_movie_base_invalid_year():
+def test_movie_create_invalid_year():
     """Test that invalid year values raise validation errors."""
 
     data = {
